@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include ('../partials/head.ejs') %>
+
+    <body>
+
+        <%- include ('../partials/nav.ejs') %>
+            <h1>This is homepage</h1>
+
+
+            <div class="blogs contents">
+
+
+                <h4>Recieving blogs</h4>
+                <% if(blogs.length> 0) { %>
+
+                    <% blogs.forEach( data=> { %>
+                        <a class='single' href="/blog/<%= data._id %>">
+                            <h1>
+                                <%= data.title %>
+                            </h1>
+                            <p>
+                                <%= data.snippet %>
+                            </p>
+                            <p>
+                                <%= data.body %>
+                            </p>
+                        </a>
+                        <% }) %>
+                            <% } %>
+
+            </div>
+            <%- include ('../partials/footer.ejs') %>
+
+                <script>
+                    const trash = document.querySelector('button.del')
+                    trash.addEventListener('click', (e) => {
+                        const endp = `/blog/${trash.dataset.doc}`
+
+                        fetch(endp, {
+                            method: "DELETE"
+                        })
+                            .then(res => res.json())
+                            .then(data => window.location.href = data.redirect)
+                            .catch(err => console.log(err))
+                    })
+                </script>
+    </body>
+
+</html>

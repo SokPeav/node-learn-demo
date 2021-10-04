@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include ('../partials/head.ejs') %>
+
+    <body>
+
+        <%- include ('../partials/nav.ejs') %>
+            <h1>This is Detail Page</h1>
+            <h1>
+                <%= blogs.title %>
+            </h1>
+            <p>
+                <%= blogs.snippet %>
+            </p>
+            <p>
+                <%= blogs.body %>
+            </p>
+            <button class="del" data-doc="<%= blogs.id %>">Delete</button>
+
+
+            <div>
+
+                <button id="myBtn">Edit</button>
+                <div id="myModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <div>
+                            <form action="/blog" method="PUT">
+                                <label for="title">Blog title:</label>
+                                <input type="text" id="title" name="title" value="<%= blogs.title  %> " required>
+                                <label for="snippet">Blog snippet:</label>
+                                <input type="text" id="snippet" name="snippet" value="<%= blogs.snippet  %>" required>
+                                <label for="body">Blog body:</label>
+                                <input id="body" required name="body" value="<%= blogs.body  %>"></input>
+                                <button class="submit" data-doc="<%= blogs.id %>">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            </div>
+            <%- include ('../partials/footer.ejs') %>
+                <script>
+                    var modal = document.getElementById("myModal");
+                    var btn = document.getElementById("myBtn");
+                    var span = document.getElementsByClassName("close")[0];
+                    btn.onclick = function () {
+                        modal.style.display = "block";
+                    }
+                    span.onclick = function () {
+                        modal.style.display = "none";
+                    }
+                </script>
+                <script>
+                    const trash = document.querySelector('button.del')
+                    trash.addEventListener('click', (e) => {
+                        const endp = `/blog/${trash.dataset.doc}`
+
+                        fetch(endp, {
+                            method: "DELETE"
+                        })
+                            .then(res => res.json())
+                            .then(data => window.location.href = data.redirect)
+                            .catch(err => console.log(err))
+                    })
+
+
+                    const sub = document.querySelector('button.submit')
+                    sub.addEventListener('click', (e) => {
+                        const endp = `/blog/${sub.dataset.doc}`
+
+                        fetch(endp, {
+                            method: "PUT",
+                        })
+                            .then(res => res.json())
+                            .then(data => console.log())
+                            .catch(err => console.log(err))
+                    })
+                </script>
+    </body>
+
+</html>
